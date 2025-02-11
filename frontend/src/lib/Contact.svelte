@@ -25,7 +25,7 @@
 >
 	<h2 class="text-3xl font-bold text-primary-500 text-center">Contact</h2>
 
-	<div class="w-full max-w-6xl flex flex-row gap-12 justify-between">
+	<div class="w-full max-w-6xl flex flex-col md:flex-row gap-12 justify-between">
 		<textarea
 			bind:value={message}
 			placeholder="Your message"
