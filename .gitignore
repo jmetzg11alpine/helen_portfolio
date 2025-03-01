@@ -24,3 +24,8 @@ fly.toml
 
 .svelte-kit
 build
+
+
+tmp
+
+go.sum
