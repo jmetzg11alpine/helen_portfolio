@@ -7,11 +7,8 @@
 	import Footer from '../lib/Footer.svelte';
 </script>
 
-<div class="min-h-screen flex flex-col items-center justify-center bg-tertiary-200 text-center p-6">
-	<Header />
-	<About />
-	<Books />
-	<NewsLetter />
-	<Contact />
-	<Footer />
-</div>
+<About />
+<Books />
+<NewsLetter />
+<Contact />
+<Footer />
