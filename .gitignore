@@ -24,3 +24,9 @@ fly.toml
 
 .svelte-kit
 build
+
+tmp
+.air.toml
+go.sum
+
+helen-portfolio.db

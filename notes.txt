@@ -1,0 +1,6 @@
+DEVELOPMENT
+air
+cd frontend && npm run dev
+
+
+docker system prune -a --volumes
