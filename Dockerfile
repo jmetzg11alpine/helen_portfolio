@@ -1,33 +1,25 @@
-# Use an official Node.js image as the base
-FROM node:18-alpine AS builder
-
-# Set working directory inside the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json first (to optimize caching)
-COPY frontend/package.json frontend/package-lock.json ./
-
-# Install dependencies (no dev dependencies in production)
-RUN npm ci --omit=dev
-
-# Copy the entire project (except files ignored in .dockerignore)
-COPY frontend ./
-
-# Build the SvelteKit app
-RUN npm run build
-
-# Use a minimal runtime image for production
-FROM node:18-alpine AS runner
+# Use a lightweight Alpine image
+FROM alpine:latest
 
 WORKDIR /app
 
-# Copy built files from the builder stage
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
+# Install SQLite (required for SQLite database access)
+RUN apk add --no-cache sqlite
 
-# Expose the port Fly.io will use
+# Copy the pre-built Go binary
+COPY main /app/main
+
+# Copy the pre-built frontend files
+COPY frontend/build /app/frontend/build
+
+# Ensure execution permissions
+RUN chmod +x /app/main
+
+# Expose the port
 EXPOSE 3000
 
-# Start the SvelteKit server
-CMD ["node", "build"]
+# Ensure database directory exists
+RUN mkdir -p /data
+
+# Command to run the application
+CMD ["/app/main"]

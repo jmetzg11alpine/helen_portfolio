@@ -3,7 +3,7 @@ package routes
 import (
 	"helen-portfolio/backend/api"
 	"helen-portfolio/backend/database"
-	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -20,6 +20,9 @@ func SetupAPIRoutes(router *gin.Engine) {
 		apiRouter.GET("/hello", func(c *gin.Context) {
 			c.JSON(200, gin.H{"message": "Hello from Go!"})
 		})
+		// contant
+		apiRouter.POST("/contact", handler.SendEmail)
+		// blog
 		apiRouter.GET("/blog-previews", handler.GetBlogPreview)
 		apiRouter.POST("/blog-new-entry", handler.CreateBlogPost)
 	}
@@ -44,12 +47,11 @@ func SetupStaticRoutes(router *gin.Engine) {
 
 		// Try to serve static files
 		filePath := "./frontend/build" + c.Request.URL.Path
-		if _, err := http.Dir("./frontend/build").Open(c.Request.URL.Path); err == nil {
+		if _, err := os.Stat(filePath); err == nil {
 			c.File(filePath)
 			c.Abort()
 			return
 		}
-
 		// If not a file, serve index.html (for SvelteKit routing)
 		c.File("./frontend/build/index.html")
 		c.Abort()
