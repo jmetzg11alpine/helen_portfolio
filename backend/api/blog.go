@@ -1,7 +1,6 @@
 package api
 
 import (
-	"helen-portfolio/backend/database"
 	"helen-portfolio/backend/models"
 	"net/http"
 	"time"
@@ -21,7 +20,7 @@ func NewHandler(db *gorm.DB) *Handler {
 func (h *Handler) GetBlogPreview(c *gin.Context) {
 	var blogPreviews []models.BlogPostPreview
 
-	result := database.DB.Model(&models.BlogPost{}).
+	result := h.db.Model(&models.BlogPost{}).
 		Select("blog_posts.id, blog_posts.title, blog_posts.sub_title, blog_posts.created_at, COUNT(blog_comments.id) as comment_count").
 		Joins("LEFT JOIN blog_comments ON blog_comments.blog_id = blog_posts.id").
 		Group("blog_posts.id").
@@ -49,7 +48,7 @@ func (h *Handler) CreateBlogPost(c *gin.Context) {
 		CreatedAt: time.Now().Unix(),
 	}
 
-	if err := database.DB.Create(&blogPost).Error; err != nil {
+	if err := h.db.Create(&blogPost).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
