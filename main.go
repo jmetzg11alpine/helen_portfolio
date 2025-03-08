@@ -15,8 +15,8 @@ func main() {
 	fmt.Println("Database connected successfully!")
 	r := gin.Default()
 
-	routes.SetupAPIRoutes(r)
 	routes.SetupStaticRoutes(r)
+	routes.SetupAPIRoutes(r)
 
 	// Start the server
 	r.Run(":3000")

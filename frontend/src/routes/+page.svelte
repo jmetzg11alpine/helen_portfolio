@@ -1,10 +1,9 @@
 <script>
-	import Header from '../lib/Header.svelte';
-	import Books from '../lib/Books.svelte';
-	import About from '../lib/About.svelte';
-	import Contact from '../lib/Contact.svelte';
-	import NewsLetter from '../lib/NewsLetter.svelte';
-	import Footer from '../lib/Footer.svelte';
+	import Books from '../lib/main/Books.svelte';
+	import About from '../lib/main/About.svelte';
+	import Contact from '../lib/main/Contact.svelte';
+	import NewsLetter from '../lib/main/NewsLetter.svelte';
+	import Footer from '../lib/main/Footer.svelte';
 </script>
 
 <About />

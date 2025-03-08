@@ -1,9 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 	let blogPosts = [];
 	onMount(async () => {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/blog-previews`);
+			const url = `${import.meta.env.VITE_API_URL}/blog-previews`;
+			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error('Failed to fetch blog posts');
 			}
@@ -13,6 +16,10 @@
 			console.error('Error fetching blog posts:', error);
 		}
 	});
+
+	function handleReadMore(id) {
+		dispatch('selectBlog', id);
+	}
 </script>
 
 <div class="container mx-auto p-4">
@@ -33,7 +40,10 @@
 					</p>
 				</section>
 				<footer class="card-footer">
-					<button class="btn variant-filled variant-filled-secondary">Read More</button>
+					<button
+						class="btn variant-filled variant-filled-secondary"
+						on:click={() => handleReadMore(post.id)}>Read More</button
+					>
 				</footer>
 			</div>
 		{/each}

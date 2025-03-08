@@ -1,6 +1,7 @@
 package api
 
 import (
+	"helen-portfolio/backend/models"
 	"net/http"
 	"net/smtp"
 	"os"
@@ -8,14 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ContactRequest struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
-}
-
 func (h *Handler) SendEmail(c *gin.Context) {
-	var req ContactRequest
+	var req models.ContactRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Invalid request format"})
 		return

@@ -1,5 +1,5 @@
 <script>
-	import CreateBlogPost from '$lib/blog/CreateBlogPost.svelte';
+	import CreateBlogPost from '$lib/admin/CreateBlogPost.svelte';
 </script>
 
 <svelte:head>

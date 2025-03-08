@@ -10,18 +10,13 @@ import (
 
 func seedDB(db *gorm.DB) {
 	var count int64
-	db.Model(&models.User{}).Count(&count)
+	db.Model(&models.BlogPost{}).Count(&count)
 	if count > 0 {
 		log.Println("Database already seeded")
 		return
 	}
 
 	log.Println("Seeding development database...")
-
-	adminUser := models.User{Email: "admin@example.com", Username: "admin", Role: "admin"}
-	regularUser := models.User{Email: "user@example.com", Username: "user", Role: "user"}
-	db.Create(&adminUser)
-	db.Create(&regularUser)
 
 	blogPost := models.BlogPost{
 		Title:     "My First Blog Post",
@@ -33,11 +28,21 @@ func seedDB(db *gorm.DB) {
 
 	blogComment := models.BlogComment{
 		Content:   "This is a comment on the blog post.",
-		UserID:    regularUser.ID,
+		Name:      "John Doe",
 		BlogID:    blogPost.ID,
 		CreatedAt: time.Now().Unix(),
+		Approved:  true,
 	}
 	db.Create(&blogComment)
+
+	blogComment2 := models.BlogComment{
+		Content:   "This is a comment is waiting for approval on the blog post.",
+		Name:      "Mary Jane",
+		BlogID:    blogPost.ID,
+		CreatedAt: time.Now().Unix(),
+		Approved:  false,
+	}
+	db.Create(&blogComment2)
 
 	merch := models.Merch{
 		Title:     "My First Merch",
@@ -48,7 +53,6 @@ func seedDB(db *gorm.DB) {
 	db.Create(&merch)
 
 	merchHistory := models.MerchHistory{
-		UserID:    regularUser.ID,
 		ItemName:  merch.Title,
 		Price:     int(merch.Price),
 		Quantity:  merch.Quantity,

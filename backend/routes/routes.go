@@ -24,6 +24,8 @@ func SetupAPIRoutes(router *gin.Engine) {
 		apiRouter.POST("/contact", handler.SendEmail)
 		// blog
 		apiRouter.GET("/blog-previews", handler.GetBlogPreview)
+		apiRouter.GET("/blog/:id", handler.GetBlogContent)
+		// admin
 		apiRouter.POST("/blog-new-entry", handler.CreateBlogPost)
 	}
 }

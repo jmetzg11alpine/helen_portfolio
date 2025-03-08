@@ -1,21 +1,12 @@
 package api
 
 import (
+	"fmt"
 	"helen-portfolio/backend/models"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
-
-type Handler struct {
-	db *gorm.DB
-}
-
-func NewHandler(db *gorm.DB) *Handler {
-	return &Handler{db: db}
-}
 
 func (h *Handler) GetBlogPreview(c *gin.Context) {
 	var blogPreviews []models.BlogPostPreview
@@ -34,24 +25,19 @@ func (h *Handler) GetBlogPreview(c *gin.Context) {
 	c.JSON(http.StatusOK, blogPreviews)
 }
 
-func (h *Handler) CreateBlogPost(c *gin.Context) {
-	var req models.CreateBlogPostRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func (h *Handler) GetBlogContent(c *gin.Context) {
+	idStr := c.Param("id")
+
+	fmt.Printf("Attempting to fetch blog post with ID: %s\n", idStr)
+
+	var blogPost models.BlogPost
+	if err := h.db.Preload("Comments", "approved = ?", true).First(&blogPost, idStr).Error; err != nil {
+		fmt.Printf("Error fetching blog post: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch blog post"})
 		return
 	}
 
-	blogPost := models.BlogPost{
-		Title:     req.Title,
-		SubTitle:  req.SubTitle,
-		Content:   req.Content,
-		CreatedAt: time.Now().Unix(),
-	}
+	fmt.Printf("ID: %s", idStr)
 
-	if err := h.db.Create(&blogPost).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.Status(http.StatusCreated)
+	c.JSON(http.StatusOK, blogPost)
 }

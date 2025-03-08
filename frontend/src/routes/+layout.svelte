@@ -1,6 +1,6 @@
 <script>
 	import '../app.postcss';
-	import Header from '$lib/Header.svelte';
+	import Header from '$lib/main/Header.svelte';
 </script>
 
 <div
