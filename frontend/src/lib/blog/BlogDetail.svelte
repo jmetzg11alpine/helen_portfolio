@@ -1,5 +1,6 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 	export let blogId;
 	const dispatch = createEventDispatcher();
 	let blog = {};
@@ -7,7 +8,6 @@
 	onMount(async () => {
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog/${blogId}`;
-			console.log(url);
 			const response = await fetch(url);
 
 			if (!response.ok) {
@@ -25,6 +25,15 @@
 	function handleGoBack() {
 		dispatch('goBackToAllBlogs');
 	}
+	const modalStore = getModalStore();
+	const modal = {
+		type: 'component',
+		component: 'commentModal',
+		meta: { blogId }
+	};
+	function openCommentModal() {
+		modalStore.trigger(modal);
+	}
 </script>
 
 <svelte:head>
@@ -36,7 +45,7 @@
 		<button on:click={handleGoBack} class="btn variant-ghost-tertiary"
 			><i class="fas fa-arrow-left mr-2"></i> Go Back
 		</button>
-		<button class="btn variant-ghost-secondary"> Leave Comment </button>
+		<button class="btn variant-ghost-secondary" on:click={openCommentModal}> Leave Comment </button>
 	</div>
 	<article class="prose prose-lg dark:prose-invert">
 		<div class="flex justify-between items-center mb-2">
@@ -76,6 +85,10 @@
 		{/if}
 	</section>
 </div>
+
+{#if $modalStore[0]}
+	<h1>Hello</h1>
+{/if}
 
 <style>
 	.blog-content {
