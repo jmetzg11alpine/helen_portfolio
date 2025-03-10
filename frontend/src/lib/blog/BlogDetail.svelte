@@ -1,13 +1,13 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
-	export let blogId;
+	export let blogID;
 	const dispatch = createEventDispatcher();
 	let blog = {};
 
 	onMount(async () => {
 		try {
-			const url = `${import.meta.env.VITE_API_URL}/blog/${blogId}`;
+			const url = `${import.meta.env.VITE_API_URL}/blog/${blogID}`;
 			const response = await fetch(url);
 
 			if (!response.ok) {
@@ -15,7 +15,6 @@
 			}
 
 			const data = await response.json();
-			console.log(data);
 			blog = data;
 		} catch (error) {
 			console.error('Error fetching blog content:', error);
@@ -29,7 +28,7 @@
 	const modal = {
 		type: 'component',
 		component: 'commentModal',
-		meta: { blogId }
+		meta: { blogID }
 	};
 	function openCommentModal() {
 		modalStore.trigger(modal);
@@ -37,7 +36,7 @@
 </script>
 
 <svelte:head>
-	<title>Blog {blogId}</title>
+	<title>Blog {blogID}</title>
 </svelte:head>
 
 <div class="container min-h-screen mx-auto px-4 max-w-3xl">
@@ -85,10 +84,6 @@
 		{/if}
 	</section>
 </div>
-
-{#if $modalStore[0]}
-	<h1>Hello</h1>
-{/if}
 
 <style>
 	.blog-content {

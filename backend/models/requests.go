@@ -11,3 +11,9 @@ type ContactRequest struct {
 	Email   string `json:"email"`
 	Message string `json:"message"`
 }
+
+type CreateBlogCommentRequest struct {
+	Name    string `json:"name"`
+	Comment string `json:"comment"`
+	BlogID  uint   `json:"blogID"`
+}

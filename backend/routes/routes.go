@@ -25,8 +25,10 @@ func SetupAPIRoutes(router *gin.Engine) {
 		// blog
 		apiRouter.GET("/blog-previews", handler.GetBlogPreview)
 		apiRouter.GET("/blog/:id", handler.GetBlogContent)
+		apiRouter.POST("/blog-comment", handler.CreateBlogComment)
 		// admin
 		apiRouter.POST("/blog-new-entry", handler.CreateBlogPost)
+		apiRouter.GET("/get-unapproved-comments", handler.GetUnapprovedComments)
 	}
 }
 

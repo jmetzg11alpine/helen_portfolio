@@ -29,3 +29,21 @@ func (h *Handler) CreateBlogPost(c *gin.Context) {
 
 	c.Status(http.StatusCreated)
 }
+
+func (h *Handler) GetUnapprovedComments(c *gin.Context) {
+	var comments []models.UnapprovedComments
+
+	result := h.db.Model(&models.BlogComment{}).
+		Select("blog_comments.*, blog_posts.title as title, blog_posts.sub_title as sub_title").
+		Joins("JOIN blog_posts ON blog_comments.blog_id = blog_posts.id").
+		Where("blog_comments.approved = ?", false).
+		Order("blog_comments.created_at desc").
+		Find(&comments)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch unapproved comments"})
+		return
+	}
+
+	c.JSON(http.StatusOK, comments)
+}

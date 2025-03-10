@@ -17,7 +17,7 @@
 </svelte:head>
 
 {#if selectedBlogId}
-	<BlogDetail on:goBackToAllBlogs={handleGoBackToAllBlogs} blogId={selectedBlogId} />
+	<BlogDetail on:goBackToAllBlogs={handleGoBackToAllBlogs} blogID={selectedBlogId} />
 {:else}
 	<div class="min-h-screen">
 		<AllView on:selectBlog={handleBlogSelect} />

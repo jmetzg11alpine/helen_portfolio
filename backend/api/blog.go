@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"helen-portfolio/backend/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,8 +29,6 @@ func (h *Handler) GetBlogPreview(c *gin.Context) {
 func (h *Handler) GetBlogContent(c *gin.Context) {
 	idStr := c.Param("id")
 
-	fmt.Printf("Attempting to fetch blog post with ID: %s\n", idStr)
-
 	var blogPost models.BlogPost
 	if err := h.db.Preload("Comments", "approved = ?", true).First(&blogPost, idStr).Error; err != nil {
 		fmt.Printf("Error fetching blog post: %v\n", err)
@@ -40,4 +39,29 @@ func (h *Handler) GetBlogContent(c *gin.Context) {
 	fmt.Printf("ID: %s", idStr)
 
 	c.JSON(http.StatusOK, blogPost)
+}
+
+func (h *Handler) CreateBlogComment(c *gin.Context) {
+	var req models.CreateBlogCommentRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Printf("Error binding JSON: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	comment := models.BlogComment{
+		Name:      req.Name,
+		Content:   req.Comment,
+		BlogID:    req.BlogID,
+		CreatedAt: time.Now().Unix(),
+		Approved:  false,
+	}
+
+	if err := h.db.Create(&comment).Error; err != nil {
+		fmt.Printf("Error creating comment: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create comment"})
+		return
+	}
+
+	c.Status(http.StatusCreated)
 }
