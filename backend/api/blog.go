@@ -36,8 +36,6 @@ func (h *Handler) GetBlogContent(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("ID: %s", idStr)
-
 	c.JSON(http.StatusOK, blogPost)
 }
 
@@ -58,7 +56,6 @@ func (h *Handler) CreateBlogComment(c *gin.Context) {
 	}
 
 	if err := h.db.Create(&comment).Error; err != nil {
-		fmt.Printf("Error creating comment: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create comment"})
 		return
 	}
