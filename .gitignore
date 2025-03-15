@@ -27,10 +27,11 @@ build
 
 tmp
 .air.toml
-go.sum
 
 helen-portfolio.db
 main
 notes.txt
 
 litefs.yml
+
+fly-deploy.yml
