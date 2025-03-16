@@ -10,28 +10,15 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
-
-func setupTestDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	err = db.AutoMigrate(&models.BlogPost{}, &models.BlogComment{})
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	return db
-}
 
 func TestGetBlogPreview(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	db := setupTestDB(t)
+
+	handler := NewHandler(db)
+	router := setupRouter(handler)
 
 	testPost1 := models.BlogPost{
 		Title:    "Test Post 1",
@@ -64,11 +51,6 @@ func TestGetBlogPreview(t *testing.T) {
 
 	db.Create(&comment1)
 	db.Create(&comment2)
-
-	handler := NewHandler(db)
-
-	router := gin.New()
-	router.GET("/api/blog-previews", handler.GetBlogPreview)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/blog-previews", nil)
@@ -106,6 +88,8 @@ func TestGetBlogContent(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	db := setupTestDB(t)
+	handler := NewHandler(db)
+	router := setupRouter(handler)
 
 	testPost := models.BlogPost{
 		Title:    "Test Blog Post",
@@ -131,10 +115,6 @@ func TestGetBlogContent(t *testing.T) {
 
 	db.Create(&approvedComment)
 	db.Create(&unapprovedComment)
-
-	handler := NewHandler(db)
-	router := gin.New()
-	router.GET("/api/blog/:id", handler.GetBlogContent)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", fmt.Sprintf("/api/blog/%d", testPost.ID), nil)
@@ -173,6 +153,8 @@ func TestCreateBlogComment(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
 	db := setupTestDB(t)
+	handler := NewHandler(db)
+	router := setupRouter(handler)
 
 	testPost := models.BlogPost{
 		Title:    "Test Post for Comments",
@@ -180,10 +162,6 @@ func TestCreateBlogComment(t *testing.T) {
 		Content:  "This is a post that will receive comments",
 	}
 	db.Create(&testPost)
-
-	handler := NewHandler(db)
-	router := gin.New()
-	router.POST("/api/blog-comment", handler.CreateBlogComment)
 
 	commentRequest := models.CreateBlogCommentRequest{
 		BlogID:  testPost.ID,

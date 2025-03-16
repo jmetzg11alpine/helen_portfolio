@@ -1,9 +1,9 @@
 package models
 
 type CreateBlogPostRequest struct {
-	Title    string `json:"title"`
-	SubTitle string `json:"sub_title"`
-	Content  string `json:"content"`
+	Title    string `json:"title" binding:"required"`
+	SubTitle string `json:"sub_title" binding:"required"`
+	Content  string `json:"content" binding:"required"`
 }
 
 type ContactRequest struct {

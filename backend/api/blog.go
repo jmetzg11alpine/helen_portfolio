@@ -42,7 +42,6 @@ func (h *Handler) GetBlogContent(c *gin.Context) {
 func (h *Handler) CreateBlogComment(c *gin.Context) {
 	var req models.CreateBlogCommentRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Printf("Error binding JSON: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
 	}
