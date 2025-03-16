@@ -1,6 +1,6 @@
 <script>
 	import '../app.postcss';
-	import Header from '$lib/main/Header.svelte';
+	import Header from '$lib/main_page/Header.svelte';
 	import { initializeStores, Modal, Toast } from '@skeletonlabs/skeleton';
 	import CommentModal from '$lib/blog/CommentModal.svelte';
 	initializeStores();

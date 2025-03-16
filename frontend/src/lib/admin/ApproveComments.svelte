@@ -18,6 +18,14 @@
 		}
 	}
 
+	async function approveComment(id) {
+		console.log('approveComment', id);
+	}
+
+	async function deleteComment(id) {
+		console.log('deleteComment', id);
+	}
+
 	onMount(async () => {
 		await getComments();
 	});
