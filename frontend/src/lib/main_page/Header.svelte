@@ -1,15 +1,19 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/stores';
-	let isMenuOpen = false;
+	let isMenuOpen = $state(false);
 
-	$: if (typeof document !== 'undefined') {
-		if (isMenuOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
+	run(() => {
+		if (typeof document !== 'undefined') {
+			if (isMenuOpen) {
+				document.body.style.overflow = 'hidden';
+			} else {
+				document.body.style.overflow = '';
+			}
 		}
-	}
+	});
 
 	function handleNavigation(event, href) {
 		// If we're not on the home page and it's a hash link
@@ -28,7 +32,7 @@
 <header class="w-full max-w-6xl flex justify-between items-center p-4" transition:fade>
 	<h1 class="text-2xl font-bold text-primary-500">Helen Metzger</h1>
 
-	<button class="md:hidden z-50" on:click={toggleMenu} aria-label="Toggle menue">
+	<button class="md:hidden z-50" onclick={toggleMenu} aria-label="Toggle menue">
 		<div class="hamburger {isMenuOpen ? 'open' : ''}">
 			<span></span>
 			<span></span>
@@ -40,12 +44,12 @@
 		<nav class="fixed inset-0 bg-white z-40 md:hidden h-screen overflow-hidden" transition:fade>
 			<ul class="flex flex-col items-center justify-center h-full gap-y-6">
 				<li>
-					<a href="#about" class="btn-link text-xl" on:click={(e) => handleNavigation(e, '#about')}
+					<a href="#about" class="btn-link text-xl" onclick={(e) => handleNavigation(e, '#about')}
 						>About</a
 					>
 				</li>
 				<li>
-					<a href="#books" class="btn-link text-xl" on:click={(e) => handleNavigation(e, '#books')}
+					<a href="#books" class="btn-link text-xl" onclick={(e) => handleNavigation(e, '#books')}
 						>Books</a
 					>
 				</li>
@@ -53,16 +57,16 @@
 					<a
 						href="#newsletter"
 						class="btn-link text-xl"
-						on:click={(e) => handleNavigation(e, '#newsletter')}>News Letter</a
+						onclick={(e) => handleNavigation(e, '#newsletter')}>News Letter</a
 					>
 				</li>
 				<li>
-					<a href="/blog" class="btn-link text-xl" on:click={(e) => handleNavigation(e, '/blog')}
+					<a href="/blog" class="btn-link text-xl" onclick={(e) => handleNavigation(e, '/blog')}
 						>Blog</a
 					>
 				</li>
 				<li>
-					<a href="/merch" class="btn-link text-xl" on:click={(e) => handleNavigation(e, '/merch')}
+					<a href="/merch" class="btn-link text-xl" onclick={(e) => handleNavigation(e, '/merch')}
 						>Merch</a
 					>
 				</li>
@@ -70,7 +74,7 @@
 					<a
 						href="#contact"
 						class="btn-link text-xl"
-						on:click={(e) => handleNavigation(e, '#contact')}>Contact</a
+						onclick={(e) => handleNavigation(e, '#contact')}>Contact</a
 					>
 				</li>
 			</ul>
@@ -80,24 +84,24 @@
 	<nav class="hidden md:flex">
 		<ul class="flex gap-x-6">
 			<li>
-				<a href="#about" class="btn-link" on:click={(e) => handleNavigation(e, '#about')}>About</a>
+				<a href="#about" class="btn-link" onclick={(e) => handleNavigation(e, '#about')}>About</a>
 			</li>
 			<li>
-				<a href="#books" class="btn-link" on:click={(e) => handleNavigation(e, '#books')}>Books</a>
+				<a href="#books" class="btn-link" onclick={(e) => handleNavigation(e, '#books')}>Books</a>
 			</li>
 			<li>
-				<a href="#newsletter" class="btn-link" on:click={(e) => handleNavigation(e, '#newsletter')}
+				<a href="#newsletter" class="btn-link" onclick={(e) => handleNavigation(e, '#newsletter')}
 					>News Letter</a
 				>
 			</li>
 			<li>
-				<a href="/blog" class="btn-link" on:click={(e) => handleNavigation(e, '/blog')}>Blog</a>
+				<a href="/blog" class="btn-link" onclick={(e) => handleNavigation(e, '/blog')}>Blog</a>
 			</li>
 			<li>
-				<a href="/merch" class="btn-link" on:click={(e) => handleNavigation(e, '/merch')}>Merch</a>
+				<a href="/merch" class="btn-link" onclick={(e) => handleNavigation(e, '/merch')}>Merch</a>
 			</li>
 			<li>
-				<a href="#contact" class="btn-link" on:click={(e) => handleNavigation(e, '#contact')}
+				<a href="#contact" class="btn-link" onclick={(e) => handleNavigation(e, '#contact')}
 					>Contact</a
 				>
 			</li>

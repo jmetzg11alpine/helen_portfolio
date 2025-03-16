@@ -2,7 +2,7 @@
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
-	export let parent; // Suppresses the "unknown prop 'parent'" warning
+	let { parent } = $props();
 
 	function closeModal() {
 		modalStore.close();
@@ -75,10 +75,10 @@
 		<input id="name" type="text" placeholder="Your Name" class="input p-2 mb-2 w-full" />
 		<textarea id="comment" placeholder="Your Comment" class="textarea p-2 mb-2 w-full"></textarea>
 		<div class="flex gap-2 mt-4">
-			<button type="submit" class="btn variant-glass-tertiary w-full" on:click={submitComment}
+			<button type="submit" class="btn variant-glass-tertiary w-full" onclick={submitComment}
 				>Submit</button
 			>
-			<button class="btn variant-glass-surface w-full" on:click={closeModal}>Cancel</button>
+			<button class="btn variant-glass-surface w-full" onclick={closeModal}>Cancel</button>
 		</div>
 	</form>
 </div>

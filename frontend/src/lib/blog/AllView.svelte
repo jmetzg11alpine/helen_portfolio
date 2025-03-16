@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
-	let blogPosts = [];
+	let blogPosts = $state([]);
 	onMount(async () => {
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog-previews`;
@@ -42,7 +42,7 @@
 				<footer class="card-footer">
 					<button
 						class="btn variant-filled variant-filled-secondary"
-						on:click={() => handleReadMore(post.id)}>Read More</button
+						onclick={() => handleReadMore(post.id)}>Read More</button
 					>
 				</footer>
 			</div>

@@ -2,7 +2,7 @@
 	import AllView from '$lib/blog/AllView.svelte';
 	import BlogDetail from '$lib/blog/BlogDetail.svelte';
 
-	let selectedBlogId = null;
+	let selectedBlogId = $state(null);
 
 	function handleBlogSelect(event) {
 		selectedBlogId = event.detail;

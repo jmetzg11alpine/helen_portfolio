@@ -1,9 +1,9 @@
 <script>
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
-	export let blogID;
+	let { blogID } = $props();
 	const dispatch = createEventDispatcher();
-	let blog = {};
+	let blog = $state({});
 
 	onMount(async () => {
 		try {
@@ -41,10 +41,10 @@
 
 <div class="container min-h-screen mx-auto px-4 max-w-3xl">
 	<div class="flex justify-between mb-8">
-		<button on:click={handleGoBack} class="btn variant-ghost-tertiary"
+		<button onclick={handleGoBack} class="btn variant-ghost-tertiary"
 			><i class="fas fa-arrow-left mr-2"></i> Go Back
 		</button>
-		<button class="btn variant-ghost-secondary" on:click={openCommentModal}> Leave Comment </button>
+		<button class="btn variant-ghost-secondary" onclick={openCommentModal}> Leave Comment </button>
 	</div>
 	<article class="prose prose-lg dark:prose-invert">
 		<div class="flex justify-between items-center mb-2">

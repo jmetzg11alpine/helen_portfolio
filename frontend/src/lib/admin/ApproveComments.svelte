@@ -1,7 +1,11 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
-	let comments = [];
-	$: console.log(comments);
+	let comments = $state([]);
+	run(() => {
+		console.log(comments);
+	});
 
 	async function getComments() {
 		try {
@@ -52,10 +56,10 @@
 				<p class="mt-2 text-md">{comment.content}</p>
 
 				<div class="flex gap-4 mt-4">
-					<button class="btn variant-filled-primary" on:click={() => approveComment(comment.ID)}>
+					<button class="btn variant-filled-primary" onclick={() => approveComment(comment.ID)}>
 						✅ Approve
 					</button>
-					<button class="btn variant-filled-error" on:click={() => deleteComment(comment.ID)}>
+					<button class="btn variant-filled-error" onclick={() => deleteComment(comment.ID)}>
 						🗑 Delete
 					</button>
 				</div>
