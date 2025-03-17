@@ -1,11 +1,13 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { enhance } from '$app/forms';
 
-	let blogPost = {
+	let blogPost = $state({
 		title: '',
 		sub_title: '',
 		content: ''
-	};
+	});
 
 	async function handleSubmit() {
 		try {
@@ -33,7 +35,7 @@
 <div class="card p-4 edit">
 	<h2 class="h2 mb-4">Create New Blog Post</h2>
 
-	<form on:submit|preventDefault={handleSubmit} class="space-y-4">
+	<form onsubmit={preventDefault(handleSubmit)} class="space-y-4">
 		<label class="label">
 			<span>Title</span>
 			<input
@@ -63,9 +65,9 @@
 				rows="6"
 				placeholder="Write your blog post content here..."
 				required
-			/>
+			></textarea>
 		</label>
 
-		<button type="submit" class="btn variant-filled-primary w-full"> Create Post </button>
+		<button type="submit" class="btn preset-filled-primary-500 w-full"> Create Post </button>
 	</form>
 </div>

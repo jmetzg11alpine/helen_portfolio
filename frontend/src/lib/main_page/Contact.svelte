@@ -1,10 +1,12 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { fade } from 'svelte/transition';
 
-	let name = '',
+	let name = $state(''),
 		email = 'no-email',
-		message = '';
-	let success = null;
+		message = $state('');
+	let success = $state(null);
 
 	async function sendEmail() {
 		const url = `${import.meta.env.VITE_API_URL}/contact`;
@@ -27,7 +29,7 @@
 	<h2 class="text-3xl font-bold text-primary-500 text-center">Contact</h2>
 
 	<form
-		on:submit|preventDefault={sendEmail}
+		onsubmit={preventDefault(sendEmail)}
 		class="space-y-6 max-w-2xl mx-auto w-full flex flex-col items-center"
 	>
 		<input
