@@ -25,7 +25,7 @@
 <div class="container mx-auto p-4">
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 		{#each blogPosts as post}
-			<div class="card p-4 variant-tertiary-primary">
+			<div class="card p-4 preset-tonal-surface">
 				<header class="card-header">
 					<h3 class="h3 font-bold">{post.title}</h3>
 				</header>

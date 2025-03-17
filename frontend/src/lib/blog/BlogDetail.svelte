@@ -23,14 +23,18 @@
 	function handleGoBack() {
 		dispatch('goBackToAllBlogs');
 	}
-	const modalStore = getModalStore();
-	const modal = {
-		type: 'component',
-		component: 'commentModal',
-		meta: { blogID }
-	};
+	// const modalStore = getModalStore();
+	// const modal = {
+	// 	type: 'component',
+	// 	component: 'commentModal',
+	// 	meta: { blogID }
+	// };
+	// function openCommentModal() {
+	// 	modalStore.trigger(modal);
+	// }
+
 	function openCommentModal() {
-		modalStore.trigger(modal);
+		console.log('openCommentModal');
 	}
 </script>
 
@@ -43,7 +47,12 @@
 		<button onclick={handleGoBack} class="btn preset-tonal-tertiary border border-tertiary-500"
 			><i class="fas fa-arrow-left mr-2"></i> Go Back
 		</button>
-		<button class="btn preset-tonal-secondary border border-secondary-500" onclick={openCommentModal}> Leave Comment </button>
+		<button
+			class="btn preset-tonal-secondary border border-secondary-500"
+			onclick={openCommentModal}
+		>
+			Leave Comment
+		</button>
 	</div>
 	<article class="prose prose-lg dark:prose-invert">
 		<div class="flex justify-between items-center mb-2">
