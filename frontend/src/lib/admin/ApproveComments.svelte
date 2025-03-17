@@ -40,12 +40,12 @@
 	{#if comments.length > 0}
 		<div>
 			{#each comments as comment}<div
-					class="card p-4 shadow-md border border-surface-300-600-token"
+					class="card p-4 shadow-md border border-surface-300-700"
 				>
 					<h2 class="text-xl font-semibold">{comment.title}</h2>
-					<p class="text-sm text-surface-600-300-token">{comment.sub_title}</p>
+					<p class="text-sm text-surface-700-300">{comment.sub_title}</p>
 				</div>
-				<div class="mt-2 text-sm text-surface-600-300-token">
+				<div class="mt-2 text-sm text-surface-700-300">
 					<b>{comment.name}</b> - {new Date(comment.created_at * 1000).toLocaleDateString('en-US', {
 						year: 'numeric',
 						month: 'long',
@@ -56,17 +56,17 @@
 				<p class="mt-2 text-md">{comment.content}</p>
 
 				<div class="flex gap-4 mt-4">
-					<button class="btn variant-filled-primary" onclick={() => approveComment(comment.ID)}>
+					<button class="btn preset-filled-primary-500" onclick={() => approveComment(comment.ID)}>
 						✅ Approve
 					</button>
-					<button class="btn variant-filled-error" onclick={() => deleteComment(comment.ID)}>
+					<button class="btn preset-filled-error-500" onclick={() => deleteComment(comment.ID)}>
 						🗑 Delete
 					</button>
 				</div>
 			{/each}
 		</div>
 	{:else}
-		<div class="card p-4 shadow-md border border-surface-300-600-token">
+		<div class="card p-4 shadow-md border border-surface-300-700">
 			<p class="text-gray-500">No unapproved comments found.</p>
 		</div>
 	{/if}

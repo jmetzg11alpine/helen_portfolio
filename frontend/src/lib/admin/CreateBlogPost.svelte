@@ -68,6 +68,6 @@
 			></textarea>
 		</label>
 
-		<button type="submit" class="btn variant-filled-primary w-full"> Create Post </button>
+		<button type="submit" class="btn preset-filled-primary-500 w-full"> Create Post </button>
 	</form>
 </div>

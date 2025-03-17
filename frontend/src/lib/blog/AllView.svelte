@@ -41,7 +41,7 @@
 				</section>
 				<footer class="card-footer">
 					<button
-						class="btn variant-filled variant-filled-secondary"
+						class="btn preset-filled preset-filled-secondary-500"
 						onclick={() => handleReadMore(post.id)}>Read More</button
 					>
 				</footer>
