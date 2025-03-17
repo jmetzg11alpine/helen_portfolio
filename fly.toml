@@ -1,0 +1,38 @@
+# fly.toml app configuration file generated for helen-portfolio on 2025-03-08T08:49:09-06:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'helen-portfolio'
+primary_region = 'lax'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[[mounts]]
+  source = 'helen_portfolio_data'
+  destination = '/app/data'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 3000
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+[[vm]]
+  size = 'shared-cpu-1x'
