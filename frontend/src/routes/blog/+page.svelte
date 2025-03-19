@@ -1,28 +1,23 @@
 <script>
 	import AllView from '$lib/blog/AllView.svelte';
 	import BlogDetail from '$lib/blog/BlogDetail.svelte';
+	import CommentModal from '$lib/blog/CommentModal.svelte';
 
-	let selectedBlogId = null;
-
-	function handleBlogSelect(event) {
-		selectedBlogId = event.detail;
-		console.log(selectedBlogId);
-	}
-	function handleGoBackToAllBlogs() {
-		selectedBlogId = null;
-	}
+	import { selectedBlogId } from '$lib/blog/blogStore.js';
 </script>
 
 <svelte:head>
 	<title>Blog</title>
 </svelte:head>
 
-{#if selectedBlogId}
+{#if $selectedBlogId}
 	<h1>Blog Detail</h1>
-	<BlogDetail on:goBackToAllBlogs={handleGoBackToAllBlogs} blogID={selectedBlogId} />
+	<BlogDetail />
 {:else}
 	<h1>All Blogs</h1>
-	<div class="min-h-screen">
-		<AllView on:selectBlog={handleBlogSelect} />
+	<div>
+		<AllView />
 	</div>
 {/if}
+
+<CommentModal />

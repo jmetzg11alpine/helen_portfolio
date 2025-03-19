@@ -1,8 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
+	import { selectedBlogId } from './blogStore.js';
 	let blogPosts = $state([]);
+
 	onMount(async () => {
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog-previews`;
@@ -16,10 +16,6 @@
 			console.error('Error fetching blog posts:', error);
 		}
 	});
-
-	function handleReadMore(id) {
-		dispatch('selectBlog', id);
-	}
 </script>
 
 <div class="container mx-auto p-4">
@@ -42,7 +38,7 @@
 				<footer class="card-footer">
 					<button
 						class="btn preset-filled preset-filled-secondary-500"
-						onclick={() => handleReadMore(post.id)}>Read More</button
+						on:click={() => selectedBlogId.set(post.id)}>Read More</button
 					>
 				</footer>
 			</div>

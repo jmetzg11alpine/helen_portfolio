@@ -1,55 +1,50 @@
 <script>
-	import { createEventDispatcher, onMount } from 'svelte';
-	let { blogID } = $props();
-	const dispatch = createEventDispatcher();
 	let blog = $state({});
 
-	onMount(async () => {
+	import { selectedBlogId, modalOpen } from './blogStore.js';
+
+	$effect(async () => {
+		const id = $selectedBlogId; // Access store value reactively
+
+		// Ensure `id` is a valid number before fetching
+		if (!id || isNaN(id)) return;
+
 		try {
-			const url = `${import.meta.env.VITE_API_URL}/blog/${blogID}`;
+			const url = `${import.meta.env.VITE_API_URL}/blog/${id}`;
 			const response = await fetch(url);
 
 			if (!response.ok) {
 				throw new Error('Failed to fetch blog content');
 			}
 
-			const data = await response.json();
-			blog = data;
+			blog = await response.json();
 		} catch (error) {
 			console.error('Error fetching blog content:', error);
+			blog = null; // Reset on error
 		}
 	});
 
 	function handleGoBack() {
-		dispatch('goBackToAllBlogs');
+		selectedBlogId.set(null);
 	}
-	// const modalStore = getModalStore();
-	// const modal = {
-	// 	type: 'component',
-	// 	component: 'commentModal',
-	// 	meta: { blogID }
-	// };
-	// function openCommentModal() {
-	// 	modalStore.trigger(modal);
-	// }
 
 	function openCommentModal() {
-		console.log('openCommentModal');
+		openModal();
 	}
 </script>
 
 <svelte:head>
-	<title>Blog {blogID}</title>
+	<title>Blog {selectedBlogId}</title>
 </svelte:head>
 
-<div class="container min-h-screen mx-auto px-4 max-w-3xl">
+<div class="container mx-auto px-4 max-w-3xl">
 	<div class="flex justify-between mb-8">
 		<button onclick={handleGoBack} class="btn preset-tonal-tertiary border border-tertiary-500"
 			><i class="fas fa-arrow-left mr-2"></i> Go Back
 		</button>
 		<button
 			class="btn preset-tonal-secondary border border-secondary-500"
-			onclick={openCommentModal}
+			onclick={() => modalOpen.set(true)}
 		>
 			Leave Comment
 		</button>

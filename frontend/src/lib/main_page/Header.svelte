@@ -30,7 +30,7 @@
 </script>
 
 <header class="w-full max-w-6xl flex justify-between items-center p-4" transition:fade>
-	<h1 class="text-2xl font-bold text-primary-500">Helen Metzger</h1>
+	<h1 class="text-2xl font-bold text-success-500">Helen Metzger</h1>
 
 	<button class="md:hidden z-50" onclick={toggleMenu} aria-label="Toggle menue">
 		<div class="hamburger {isMenuOpen ? 'open' : ''}">
