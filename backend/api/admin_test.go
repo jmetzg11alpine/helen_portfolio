@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"helen-portfolio/backend/models"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func TestCreateBlogPost(t *testing.T) {
@@ -178,9 +180,6 @@ func TestGetUnapprovedComments(t *testing.T) {
 		if comment.Title != blogPost.Title {
 			t.Errorf("Expected blog title %s, got %s", blogPost.Title, comment.Title)
 		}
-		if comment.SubTitle != blogPost.SubTitle {
-			t.Errorf("Expected blog subtitle %s, got %s", blogPost.SubTitle, comment.SubTitle)
-		}
 	}
 }
 
@@ -221,5 +220,122 @@ func TestGetUnapprovedComments_NoComments(t *testing.T) {
 	// Should return an empty array
 	if len(comments) != 0 {
 		t.Errorf("Expected 0 comments, got %d", len(comments))
+	}
+}
+
+func TestApproveComment(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	db := setupTestDB(t)
+	handler := NewHandler(db)
+	router := setupRouter(handler)
+
+	// Create test blog post
+	blogPost := models.BlogPost{
+		Title:     "Test Blog Post",
+		SubTitle:  "A post for testing",
+		Content:   "This is test content",
+		CreatedAt: time.Now().Unix(),
+	}
+	if err := db.Create(&blogPost).Error; err != nil {
+		t.Fatalf("Failed to create test blog post: %v", err)
+	}
+
+	unapprovedComment1 := models.BlogComment{
+		BlogID:    blogPost.ID,
+		Name:      "Test User 1",
+		Content:   "First unapproved comment",
+		Approved:  false,
+		CreatedAt: time.Now().Unix(),
+	}
+
+	if err := db.Create(&unapprovedComment1).Error; err != nil {
+		t.Fatalf("Failed to create unapproved comment 1: %v", err)
+	}
+
+	requestBody := models.CommentIDRequest{
+		ID: unapprovedComment1.ID,
+	}
+
+	jsonBody, err := json.Marshal(requestBody)
+	if err != nil {
+		t.Fatalf("Failed to marshal request body: %v", err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/api/approve-comment", bytes.NewBuffer(jsonBody))
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
+	}
+
+	// Now query the comment to check if it's approved
+	var updatedComment models.BlogComment
+	if err := db.First(&updatedComment, unapprovedComment1.ID).Error; err != nil {
+		t.Fatalf("Failed to fetch updated comment: %v", err)
+	}
+
+	if !updatedComment.Approved {
+		t.Errorf("Comment should be approved but it's not")
+	}
+}
+
+func TestDeleteComment(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	db := setupTestDB(t)
+	handler := NewHandler(db)
+	router := setupRouter(handler)
+
+	// Create test blog post
+	blogPost := models.BlogPost{
+		Title:     "Test Blog Post",
+		SubTitle:  "A post for testing",
+		Content:   "This is test content",
+		CreatedAt: time.Now().Unix(),
+	}
+	if err := db.Create(&blogPost).Error; err != nil {
+		t.Fatalf("Failed to create test blog post: %v", err)
+	}
+
+	unapprovedComment1 := models.BlogComment{
+		BlogID:    blogPost.ID,
+		Name:      "Test User 1",
+		Content:   "First unapproved comment",
+		Approved:  false,
+		CreatedAt: time.Now().Unix(),
+	}
+
+	if err := db.Create(&unapprovedComment1).Error; err != nil {
+		t.Fatalf("Failed to create unapproved comment 1: %v", err)
+	}
+
+	requestBody := models.CommentIDRequest{
+		ID: unapprovedComment1.ID,
+	}
+
+	jsonBody, err := json.Marshal(requestBody)
+	if err != nil {
+		t.Fatalf("Failed to marshal request body: %v", err)
+	}
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/api/delete-comment", bytes.NewBuffer(jsonBody))
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
+	}
+
+	// Now check if the comment was actually deleted
+	var deletedComment models.BlogComment
+	err = db.First(&deletedComment, unapprovedComment1.ID).Error
+
+	// If the comment was deleted, we should get a "record not found" error
+	if err == nil {
+		t.Errorf("Expected comment to be deleted, but it still exists")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		t.Errorf("Expected 'record not found' error, got: %v", err)
 	}
 }

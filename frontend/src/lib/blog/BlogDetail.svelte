@@ -11,7 +11,6 @@
 
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog/${id}`;
-			console.log(url);
 			const response = await fetch(url);
 
 			if (!response.ok) {
@@ -40,20 +39,18 @@
 
 <div class="container mx-auto px-4 max-w-3xl">
 	<div class="flex justify-between mb-8">
-		<button onclick={handleGoBack} class="btn preset-tonal-tertiary border border-tertiary-500"
-			><i class="fas fa-arrow-left mr-2"></i> Go Back
+		<button onclick={handleGoBack} class="btn preset-filled-tertiary-500 shadow-xl"
+			><i class="fas fa-arrow-left mr-2"></i>Go Back
 		</button>
-		<button
-			class="btn preset-tonal-secondary border border-secondary-500"
-			onclick={() => modalOpen.set(true)}
-		>
+		<button class="btn preset-filled-tertiary-500 shadow-xl" onclick={() => modalOpen.set(true)}>
 			Leave Comment
 		</button>
 	</div>
 	<article class="prose prose-lg dark:prose-invert">
-		<div class="flex justify-between items-center mb-2">
+		<div class="flex flex-col items-center mb-2">
 			<h1 class="text-4xl font-bold m-0">{blog.title}</h1>
-			<div class="text-sm text-surface-700-300">
+			<h2 class="text-xl text-surface-700-300 mt-3">{blog.sub_title}</h2>
+			<div class="text-sm text-surface-700 mb-4">
 				{new Date(blog.created_at * 1000).toLocaleDateString('en-US', {
 					year: 'numeric',
 					month: 'long',
@@ -61,7 +58,7 @@
 				})}
 			</div>
 		</div>
-		<h2 class="text-xl text-surface-700-300 mb-4">{blog.sub_title}</h2>
+
 		<div class="blog-content leading-relaxed mb-12">{blog.content}</div>
 	</article>
 

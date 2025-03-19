@@ -51,6 +51,8 @@ func setupRouter(handler *Handler) *gin.Engine {
 	// admin
 	router.POST("/api/blog-new-entry", handler.CreateBlogPost)
 	router.GET("/api/get-unapproved-comments", handler.GetUnapprovedComments)
+	router.POST("/api/approve-comment", handler.ApproveComment)
+	router.POST("/api/delete-comment", handler.DeleteComment)
 
 	return router
 }

@@ -11,10 +11,8 @@
 </svelte:head>
 
 {#if $selectedBlogId}
-	<h1>Blog Detail</h1>
 	<BlogDetail />
 {:else}
-	<h1>All Blogs</h1>
 	<div>
 		<AllView />
 	</div>

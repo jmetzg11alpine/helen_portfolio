@@ -29,6 +29,8 @@ func SetupAPIRoutes(router *gin.Engine) {
 		// admin
 		apiRouter.POST("/blog-new-entry", handler.CreateBlogPost)
 		apiRouter.GET("/get-unapproved-comments", handler.GetUnapprovedComments)
+		apiRouter.POST("/approve-comment", handler.ApproveComment)
+		apiRouter.POST("/delete-comment", handler.DeleteComment)
 	}
 }
 

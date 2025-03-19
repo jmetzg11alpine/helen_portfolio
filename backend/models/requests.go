@@ -17,3 +17,7 @@ type CreateBlogCommentRequest struct {
 	Comment string `json:"comment"`
 	BlogID  uint   `json:"blogID"`
 }
+
+type CommentIDRequest struct {
+	ID uint `json:"id" binding:"required"`
+}

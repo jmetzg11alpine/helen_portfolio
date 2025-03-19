@@ -34,7 +34,7 @@ func (h *Handler) GetUnapprovedComments(c *gin.Context) {
 	var comments []models.UnapprovedComments
 
 	result := h.db.Model(&models.BlogComment{}).
-		Select("blog_comments.*, blog_posts.title as title, blog_posts.sub_title as sub_title").
+		Select("blog_comments.*, blog_posts.title as title").
 		Joins("JOIN blog_posts ON blog_comments.blog_id = blog_posts.id").
 		Where("blog_comments.approved = ?", false).
 		Order("blog_comments.created_at desc").
@@ -46,4 +46,36 @@ func (h *Handler) GetUnapprovedComments(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, comments)
+}
+
+func (h *Handler) ApproveComment(c *gin.Context) {
+	var req models.CommentIDRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result := h.db.Model(&models.BlogComment{}).Where("id= ?", req.ID).Update("approved", true)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to approve comment"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Comment approved successfully"})
+
+}
+
+func (h *Handler) DeleteComment(c *gin.Context) {
+	var req models.CommentIDRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	result := h.db.Delete(&models.BlogComment{}, req.ID)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to approve comment"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Comment deleted successfully"})
 }

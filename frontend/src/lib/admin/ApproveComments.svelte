@@ -23,11 +23,37 @@
 	}
 
 	async function approveComment(id) {
-		console.log('approveComment', id);
+		const url = `${import.meta.env.VITE_API_URL}/approve-comment`;
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ id })
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to approve comment');
+		}
+
+		await getComments();
 	}
 
 	async function deleteComment(id) {
-		console.log('deleteComment', id);
+		const url = `${import.meta.env.VITE_API_URL}/delete-comment`;
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ id })
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to delete comment');
+		}
+
+		await getComments();
 	}
 
 	onMount(async () => {
@@ -35,39 +61,44 @@
 	});
 </script>
 
-<div class="container mx-auto p-6">
+<div class="mx-auto">
 	<h1 class="text-2xl font-bold mb-6">Unapproved Comments</h1>
 	{#if comments.length > 0}
 		<div>
-			{#each comments as comment}<div
-					class="card p-4 shadow-md border border-surface-300-700"
-				>
+			{#each comments as comment}
+				<div class="card p-4 shadow-md bg-surface-100 border border-surface-400 mb-4">
 					<h2 class="text-xl font-semibold">{comment.title}</h2>
-					<p class="text-sm text-surface-700-300">{comment.sub_title}</p>
-				</div>
-				<div class="mt-2 text-sm text-surface-700-300">
-					<b>{comment.name}</b> - {new Date(comment.created_at * 1000).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric'
-					})}
-				</div>
 
-				<p class="mt-2 text-md">{comment.content}</p>
+					<div class="mt-2 text-sm text-surface-700-300">
+						<b>{comment.name}</b> - {new Date(comment.created_at * 1000).toLocaleDateString(
+							'en-US',
+							{
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							}
+						)}
+					</div>
 
-				<div class="flex gap-4 mt-4">
-					<button class="btn preset-filled-primary-500" onclick={() => approveComment(comment.ID)}>
-						✅ Approve
-					</button>
-					<button class="btn preset-filled-error-500" onclick={() => deleteComment(comment.ID)}>
-						🗑 Delete
-					</button>
+					<p class="mt-3 text-md">{comment.content}</p>
+
+					<div class="flex justify-between mt-4">
+						<button
+							class="btn preset-filled-success-500"
+							onclick={() => approveComment(comment.ID)}
+						>
+							✅ Approve
+						</button>
+						<button class="btn preset-filled-error-500" onclick={() => deleteComment(comment.ID)}>
+							🗑 Delete
+						</button>
+					</div>
 				</div>
 			{/each}
 		</div>
 	{:else}
 		<div class="card p-4 shadow-md border border-surface-300-700">
-			<p class="text-gray-500">No unapproved comments found.</p>
+			<p class="text-primary-500">No unapproved comments found.</p>
 		</div>
 	{/if}
 </div>

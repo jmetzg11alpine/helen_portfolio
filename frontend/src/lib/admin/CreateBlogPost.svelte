@@ -1,8 +1,4 @@
 <script>
-	import { preventDefault } from 'svelte/legacy';
-
-	import { enhance } from '$app/forms';
-
 	let blogPost = $state({
 		title: '',
 		sub_title: '',
@@ -34,7 +30,7 @@
 	}
 </script>
 
-<div class="card p-4 edit">
+<div class="card mx-auto p-6 bg-secondary-500 border border-secondary-200 my-4">
 	<h2 class="h2 mb-4">Create New Blog Post</h2>
 
 	<form onsubmit={preventDefault(handleSubmit)} class="space-y-4">
@@ -70,6 +66,6 @@
 			></textarea>
 		</label>
 
-		<button type="submit" class="btn preset-filled-primary-500 w-full"> Create Post </button>
+		<button type="submit" class="btn preset-filled-secondary-500 w-full"> Create Post </button>
 	</form>
 </div>
