@@ -11,6 +11,7 @@
 
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog/${id}`;
+			console.log(url);
 			const response = await fetch(url);
 
 			if (!response.ok) {

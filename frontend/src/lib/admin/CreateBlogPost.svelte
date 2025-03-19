@@ -11,7 +11,9 @@
 
 	async function handleSubmit() {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/blog-new-entry`, {
+			const url = `${import.meta.env.VITE_API_URL}/blog-new-entry`;
+			console.log(url);
+			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

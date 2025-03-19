@@ -6,6 +6,7 @@
 	onMount(async () => {
 		try {
 			const url = `${import.meta.env.VITE_API_URL}/blog-previews`;
+			console.log(url);
 			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error('Failed to fetch blog posts');
