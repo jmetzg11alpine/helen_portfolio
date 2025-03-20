@@ -40,7 +40,7 @@
 <div class="container mx-auto px-4 max-w-3xl">
 	<div class="flex justify-between mb-8">
 		<button onclick={handleGoBack} class="btn preset-filled-tertiary-500 shadow-xl"
-			><i class="fas fa-arrow-left mr-2"></i>Go Back
+			>Go Back
 		</button>
 		<button class="btn preset-filled-tertiary-500 shadow-xl" onclick={() => modalOpen.set(true)}>
 			Leave Comment

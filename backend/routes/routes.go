@@ -31,6 +31,7 @@ func SetupAPIRoutes(router *gin.Engine) {
 		apiRouter.GET("/get-unapproved-comments", handler.GetUnapprovedComments)
 		apiRouter.POST("/approve-comment", handler.ApproveComment)
 		apiRouter.POST("/delete-comment", handler.DeleteComment)
+		apiRouter.POST("/login", handler.Login)
 	}
 }
 

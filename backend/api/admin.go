@@ -5,8 +5,40 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
+
 	"github.com/gin-gonic/gin"
 )
+
+var secretKey = []byte("secret")
+
+func (h *Handler) Login(c *gin.Context) {
+	var req models.LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	role := "user"
+	if req.Username == "admin" && req.Password == "admin" {
+		role = "admin"
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": req.Username,
+		"role":     role,
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
+	})
+
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": tokenString, "role": role})
+
+}
 
 func (h *Handler) CreateBlogPost(c *gin.Context) {
 	var req models.CreateBlogPostRequest

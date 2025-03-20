@@ -3,9 +3,6 @@
 
 	import { onMount } from 'svelte';
 	let comments = $state([]);
-	run(() => {
-		console.log(comments);
-	});
 
 	async function getComments() {
 		try {
